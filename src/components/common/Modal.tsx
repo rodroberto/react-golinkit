@@ -16,24 +16,32 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   body: React.ReactNode;
+  primaryBtn?: string;
+  onPrimaryBtn?: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, body }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  body,
+  primaryBtn,
+  onPrimaryBtn,
+}) => {
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose} size='sm'>
-      <ModalOverlay
-        bg='blackAlpha.300'
-        backdropFilter='blur(5px) hue-rotate(90deg)'
-      />
+      <ModalOverlay />
       <ModalContent marginTop='auto' marginBottom='10px' borderRadius='16px'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>{body}</ModalBody>
-        <ModalFooter justifyContent='center'>
-          <Button onClick={onClose} isFullWidth>
-            Submit
-          </Button>
-        </ModalFooter>
+        {primaryBtn && (
+          <ModalFooter justifyContent='center'>
+            <Button onClick={onPrimaryBtn} isFullWidth>
+              {primaryBtn}
+            </Button>
+          </ModalFooter>
+        )}
       </ModalContent>
     </ChakraModal>
   );

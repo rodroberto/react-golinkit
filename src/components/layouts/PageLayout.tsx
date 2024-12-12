@@ -6,9 +6,10 @@ interface PageLayoutProps extends PropsWithChildren {
   onBack: () => void;
   title: string;
   isMenu?: boolean;
+  onMenuOpen?: () => void;
 }
 
-const PageLayout = ({ children, onBack, title, isMenu }: PageLayoutProps) => {
+const PageLayout = ({ children, onBack, title, isMenu, onMenuOpen }: PageLayoutProps) => {
   return (
     <Flex flexDirection='column'>
       <Flex
@@ -32,6 +33,8 @@ const PageLayout = ({ children, onBack, title, isMenu }: PageLayoutProps) => {
             right='24px'
             fontSize='20px'
             color='white'
+            cursor='pointer'
+            onClick={onMenuOpen}
           />
         )}
       </Flex>

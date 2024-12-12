@@ -41,6 +41,7 @@ const Signup = () => {
   const onNext = () => {
     if (step === SignUpStep.VERIFY_STEP) {
       console.log('onVerify');
+      navigate('/onboarding')
       return;
     };
     setStep((prev) => prev + 1);

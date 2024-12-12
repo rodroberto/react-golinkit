@@ -11,7 +11,7 @@ import { TextInputType } from '../../lib/constants/global.constants';
 interface TextInputProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  onChange: (val: string) => void;
+  onChange?: (val: string) => void;
   placeholder?: string;
   value?: string;
   margin?: string;
@@ -35,7 +35,7 @@ const TextInput = ({
       <Input
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange?.(e.target.value)}
         type={type}
       />
       {rightIcon && (

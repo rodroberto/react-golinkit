@@ -12,6 +12,7 @@ import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
+import Onboarding from '../pages/Onboarding';
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
 
         {/* Private Routes */}
         <Route element={<PrivateRoute />}>
+          <Route path='/onboarding' element={<Onboarding />} />
           <Route path='/profile' element={<Profile />} />
         </Route>
 
