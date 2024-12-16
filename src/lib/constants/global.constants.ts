@@ -11,6 +11,7 @@ export enum MenuItems {
   UPDATE_EMAIL = 'Update Email',
   CHANGE_PASSWORD = 'Change Password',
   STATS = 'Stats',
+  LOGOUT = 'Log Out',
 }
 
 export enum UpdateEmailStep {

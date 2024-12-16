@@ -7,8 +7,8 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Flex,
 } from '@chakra-ui/react';
+
 import Button from './Button';
 
 interface ModalProps {
@@ -18,6 +18,7 @@ interface ModalProps {
   body: React.ReactNode;
   primaryBtn?: string;
   onPrimaryBtn?: () => void;
+  isPrimaryBtnDisabled?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -27,6 +28,7 @@ const Modal: React.FC<ModalProps> = ({
   body,
   primaryBtn,
   onPrimaryBtn,
+  isPrimaryBtnDisabled
 }) => {
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose} size='sm'>
@@ -34,10 +36,10 @@ const Modal: React.FC<ModalProps> = ({
       <ModalContent marginTop='auto' marginBottom='10px' borderRadius='16px'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>{body}</ModalBody>
+        <ModalBody maxHeight='600px' overflowY='auto'>{body}</ModalBody>
         {primaryBtn && (
           <ModalFooter justifyContent='center'>
-            <Button onClick={onPrimaryBtn} isFullWidth>
+            <Button isDisabled={isPrimaryBtnDisabled} onClick={onPrimaryBtn} isFullWidth>
               {primaryBtn}
             </Button>
           </ModalFooter>

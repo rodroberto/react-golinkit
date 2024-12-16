@@ -1,14 +1,32 @@
+import { useToast } from '@chakra-ui/react';
 import Modal from '../common/Modal';
 import TextInput from '../common/TextInput';
 
 interface ProfileLinkModalProps {
   isOpen: boolean;
   onClose: () => void;
+  profileLink: string;
 }
 
-const ProfileLinkModal = ({ isOpen, onClose }: ProfileLinkModalProps) => {
+const ProfileLinkModal = ({
+  isOpen,
+  onClose,
+  profileLink,
+}: ProfileLinkModalProps) => {
+  const toast = useToast();
+
   const onCopyLink = () => {
-    onClose();
+    navigator.clipboard.writeText(
+      `${process.env.REACT_APP_WEP_URL}/profiles/${profileLink}`
+    );
+    toast({
+      title: 'Profile Link',
+      description: 'Copied profile link successfully',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+      position: 'top'
+    });
   };
 
   return (
@@ -18,8 +36,7 @@ const ProfileLinkModal = ({ isOpen, onClose }: ProfileLinkModalProps) => {
       title='Profile Link'
       body={
         <TextInput
-          // value={linkName}
-          // onChange={(val: string) => setLinkName(val)}
+          value={`${process.env.REACT_APP_WEP_URL}/profiles/${profileLink}`}
           placeholder='Profile link'
         />
       }

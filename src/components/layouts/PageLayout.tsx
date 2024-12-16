@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { Flex, Image, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { ChevronLeftIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 interface PageLayoutProps extends PropsWithChildren {
@@ -17,7 +17,6 @@ const PageLayout = ({ children, onBack, title, isMenu, onMenuOpen }: PageLayoutP
         justifyContent='center'
         padding='24px'
         position='relative'
-        onClick={onBack}
       >
         <ChevronLeftIcon
           position='absolute'
@@ -25,6 +24,7 @@ const PageLayout = ({ children, onBack, title, isMenu, onMenuOpen }: PageLayoutP
           cursor='pointer'
           fontSize='20px'
           color='white'
+          onClick={onBack}
         />
         <Text color='white'>{title}</Text>
         {isMenu && (

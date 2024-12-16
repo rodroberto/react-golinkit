@@ -5,6 +5,7 @@ import {
   useState,
   useEffect,
 } from 'react';
+import { Api } from '../Api';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -17,19 +18,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const login = (username: string, password: string) => {
-    // Call the login API
-    setIsAuthenticated(true);
+  const login = async (email: string, password: string) => {
+    const { data } = await Api.post('/users/login', {
+      email,
+      password,
+    });
+    if (data.accessToken) {
+      console.log("login", data.accessToken)
+      localStorage.setItem('token', data.accessToken);
+      setIsAuthenticated(true);
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
     setIsAuthenticated(false);
   };
 
   useEffect(() => {
-    // Check if the user is already logged in (e.g., from localStorage)
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('token');
     if (token) setIsAuthenticated(true);
   }, []);
 

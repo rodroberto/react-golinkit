@@ -1,33 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 import AuthLayout from '../components/layouts/AuthLayout';
 import PageHeader from '../components/PageHeader';
 import TextInput from '../components/common/TextInput';
 import { TextInputType } from '../lib/constants/global.constants';
+import Button from '../components/common/Button';
+import { Api } from '../lib/Api';
+import { useAuth } from '../lib/contexts/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
+  const {login, isAuthenticated} = useAuth();
+
   const navigate = useNavigate();
 
-  const onLogin = () => {
-    console.log('onlogin');
+  useEffect(() => {
+    if (isAuthenticated) navigate('/profile')
+  }, [isAuthenticated])
+
+  const onLogin = async () => {
+    login(email, password)
   };
 
   return (
     <AuthLayout onBack={() => navigate(-1)}>
-      <Flex flexDirection='column'>
+      <Flex flexDirection='column' gap={4}>
         <PageHeader title='Login' description='Please login to continue' />
         <TextInput
           placeholder='Email'
           value={email}
           onChange={(val: string) => setEmail(val)}
-          margin='24px 0px 16px 0px'
           leftIcon={<EmailIcon color='gray.300' />}
         />
         <TextInput
@@ -46,22 +54,27 @@ const Login = () => {
           type={isPasswordVisible ? TextInputType.TEXT : TextInputType.PASSWORD}
         />
         <Text
-          textAlign='right'
-          marginTop='16px'
+          marginLeft='auto'
+          width='fix-content'
           cursor='pointer'
-          color='purple'
+          backgroundImage='linear-gradient(133.19deg, #F65B1A 2.22%, #CF00FF 94.24%)'
+          backgroundClip='text'
+          color='transparent'
           onClick={() => navigate('/forgot-password')}
         >
           Forgot Password?
         </Text>
       </Flex>
       <Flex flexDirection='column'>
-        <Button onClick={onLogin}>Login</Button>
+        <Button isDisabled={!email || !password} onClick={onLogin}>Login</Button>
         <Flex marginTop='12px'>
           <Text>Don't have an account?</Text>
+
           <Text
+            backgroundImage='linear-gradient(133.19deg, #F65B1A 2.22%, #CF00FF 94.24%)'
+            backgroundClip='text'
+            color='transparent'
             cursor='pointer'
-            color='purple'
             onClick={() => navigate('/signup')}
           >
             Sign up

@@ -1,4 +1,4 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { Flex, Text, VStack } from '@chakra-ui/react';
 
 interface MiniStatProps {
   title: string;
@@ -7,10 +7,16 @@ interface MiniStatProps {
 
 const MiniStat = ({ title, count }: MiniStatProps) => {
   return (
-    <VStack>
+    <Flex
+      border='1px solid #e2e8f0'
+      borderRadius='12px'
+      padding='6px'
+      flexDirection='column'
+      alignItems='center'
+    >
       <Text>{title}</Text>
-      <Text>{count}</Text>
-    </VStack>
+      <Text fontWeight='600'>{count}</Text>
+    </Flex>
   );
 };
 

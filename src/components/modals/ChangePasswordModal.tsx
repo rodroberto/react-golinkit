@@ -3,6 +3,7 @@ import Modal from '../common/Modal';
 import TextInput from '../common/TextInput';
 import { LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { TextInputType } from '../../lib/constants/global.constants';
+import { Api } from '../../lib/Api';
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -20,7 +21,25 @@ const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false);
 
-  const onUpdate = () => {
+  const TOKEN = localStorage.getItem('token');
+
+  const onUpdate = async () => {
+    if (TOKEN) {
+      const { data } = await Api.put(
+        '/users/update-password',
+        {
+          currentPassword,
+          newPassword: password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      );
+    } else {
+      console.log('No token found, user is not authorized');
+    }
     onClose();
   };
 
@@ -33,7 +52,7 @@ const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
         <>
           <TextInput
             placeholder='Current Password'
-            value={password}
+            value={currentPassword}
             onChange={(val: string) => setCurrentPassword(val)}
             margin='0px 0px 16px 0px'
             leftIcon={<LockIcon color='gray.300' />}
@@ -90,6 +109,12 @@ const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
       }
       primaryBtn='Update'
       onPrimaryBtn={onUpdate}
+      isPrimaryBtnDisabled={
+        !currentPassword ||
+        !password ||
+        !confirmPassword ||
+        password !== confirmPassword
+      }
     />
   );
 };

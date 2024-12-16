@@ -10,12 +10,20 @@ const PageHeader = ({ title, description }: PageHeaderProps) => {
     <Flex flexDirection='column'>
       <Flex alignItems='center'>
         <Divider />
-        <Text width='full' textAlign='center' fontSize='20px' fontFamily='bold' color='purple'>
+        <Text
+          fontSize='20px'
+          fontWeight='500'
+          backgroundImage='linear-gradient(133.19deg, #F65B1A 2.22%, #CF00FF 94.24%)'
+          backgroundClip='text'
+          color='transparent'
+          width='full'
+          textAlign='center'
+        >
           {title}
         </Text>
         <Divider />
       </Flex>
-      <Text textAlign='center' marginTop='12px'>{description}</Text>
+      <Text textAlign='center' fontSize='14px' marginTop='12px'>{description}</Text>
     </Flex>
   );
 };

@@ -1,6 +1,6 @@
-import { ReactNode, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Flex, Text } from '@chakra-ui/react';
+import { ReactNode, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Flex, Text, useToast } from '@chakra-ui/react';
 import {
   AddIcon,
   EmailIcon,
@@ -16,6 +16,7 @@ import AuthLayout from '../components/layouts/AuthLayout';
 import { SignUpStep } from '../lib/constants/auth.constants';
 import { TextInputType } from '../lib/constants/global.constants';
 import Verify from '../components/Verify';
+import { Api } from '../lib/Api';
 
 const Signup = () => {
   const [email, setEmail] = useState<string>('');
@@ -27,24 +28,88 @@ const Signup = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false);
+  const [verifyCode, setVerifyCode] = useState<string>('');
 
   const navigate = useNavigate();
+  const toast = useToast();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const paramEmail = queryParams.get('email-verify');
+
+  useEffect(() => {
+    if (paramEmail) {
+      setEmail(paramEmail);
+      setStep(SignUpStep.VERIFY_STEP)
+    }
+  }, [paramEmail])
 
   const onBack = () => {
     if (step === SignUpStep.EMAIL_STEP) {
-      navigate(-1)
+      navigate(-1);
       return;
-    };
+    }
     setStep((prev) => prev - 1);
   };
 
-  const onNext = () => {
+  const onNext = async () => {
     if (step === SignUpStep.VERIFY_STEP) {
-      console.log('onVerify');
-      navigate('/onboarding')
+      const { data } = await Api.post(
+        '/users/verify',
+        { verifyCode, email },
+      );
+      if (data.result) {
+        toast({
+          title: 'Register',
+          description: 'Registered successfully',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        });
+        navigate('/login');
+      }
       return;
-    };
-    setStep((prev) => prev + 1);
+    } else if (step === SignUpStep.PASSWORDF_STEP) {
+      const { data } = await Api.post('/users/register', {
+        username,
+        email,
+        password,
+      });
+      if (data.result) {
+        sendVerification();
+      }
+    } else {
+      setStep((prev) => prev + 1);
+    }
+  };
+
+  const sendVerification = async () => {
+    const { data } = await Api.post(
+      '/users/send-verification-code',
+      { email }
+    );
+    if (data.result) {
+      toast({
+        title: 'Verify',
+        description: 'Verification code sent',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+      if (step === SignUpStep.PASSWORDF_STEP) {
+        setStep((prev) => prev + 1);
+      }
+    } else {
+      toast({
+        title: 'Verify',
+        description: 'Sending verification code failed',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
   };
 
   const stepMapper: Record<SignUpStep, ReactNode> = {
@@ -55,7 +120,6 @@ const Signup = () => {
           placeholder='Email'
           value={email}
           onChange={(val: string) => setEmail(val)}
-          margin='24px 0px 16px 0px'
           leftIcon={<EmailIcon color='gray.300' />}
         />
         <TextInput
@@ -73,14 +137,12 @@ const Signup = () => {
           placeholder='Username'
           value={username}
           onChange={(val: string) => setUsername(val)}
-          margin='24px 0px 16px 0px'
           leftIcon={<AddIcon color='gray.300' />}
         />
         <TextInput
           placeholder='Password'
           value={password}
           onChange={(val: string) => setPassword(val)}
-          margin='0px 0px 16px 0px'
           leftIcon={<LockIcon color='gray.300' />}
           rightIcon={
             isPasswordVisible ? (
@@ -113,14 +175,32 @@ const Signup = () => {
         />
       </>
     ),
-    [SignUpStep.VERIFY_STEP]: <Verify email={email as string} />,
+    [SignUpStep.VERIFY_STEP]: (
+      <Verify
+        email={email as string}
+        onChange={(val: string) => setVerifyCode(val)}
+        onResend={sendVerification}
+      />
+    ),
+  };
+
+  const btnDisabledMapper: Record<SignUpStep, boolean> = {
+    [SignUpStep.EMAIL_STEP]: !email || !confirmEmail || email !== confirmEmail,
+    [SignUpStep.PASSWORDF_STEP]:
+      !username ||
+      !password ||
+      !confirmPassword ||
+      password !== confirmPassword,
+    [SignUpStep.VERIFY_STEP]: verifyCode.length < 4,
   };
 
   return (
     <AuthLayout onBack={onBack}>
-      <Flex flexDirection='column'>{stepMapper[step]}</Flex>
+      <Flex flexDirection='column' gap={4}>
+        {stepMapper[step]}
+      </Flex>
       <Flex flexDirection='column'>
-        <Button onClick={onNext}>
+        <Button isDisabled={btnDisabledMapper[step]} onClick={onNext}>
           {step === SignUpStep.VERIFY_STEP ? 'Verify' : 'Next'}
         </Button>
         {step === SignUpStep.EMAIL_STEP && (

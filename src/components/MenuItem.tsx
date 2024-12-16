@@ -10,7 +10,7 @@ const MenuItem = ({ title, onClick }: MenuItemProps) => {
     <Box
       cursor='pointer'
       padding='10px 16px'
-      _hover={{ color: 'blue', background: 'purple', borderRadius: '24px' }}
+      _hover={{ color: '#D818C3', background: 'rgba(255, 121, 121, 0.1)', borderRadius: '24px' }}
       onClick={onClick}
     >
       {title}

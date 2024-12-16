@@ -17,6 +17,11 @@ interface TextInputProps {
   margin?: string;
   onRightIcon?: () => void;
   type?: TextInputType;
+  isReadOnly?: boolean;
+  url?: string;
+  linkId?: string;
+  onClick?: () => void;
+  backgroundColor?: string;
 }
 
 const TextInput = ({
@@ -28,18 +33,28 @@ const TextInput = ({
   margin,
   onRightIcon,
   type = TextInputType.TEXT,
+  isReadOnly,
+  onClick,
+  backgroundColor
 }: TextInputProps) => {
   return (
     <InputGroup margin={margin}>
-      {leftIcon && <InputLeftElement>{leftIcon}</InputLeftElement>}
+      {leftIcon && <InputLeftElement marginTop='4px'>{leftIcon}</InputLeftElement>}
       <Input
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         type={type}
+        backgroundColor={backgroundColor || '#F8F8F8'}
+        borderRadius='12px'
+        size='lg'
+        fontSize='16px'
+        readOnly={isReadOnly}
+        {...isReadOnly && !rightIcon && {cursor: 'pointer'}}
+        {...isReadOnly && !rightIcon && {onClick}}
       />
       {rightIcon && (
-        <InputRightElement onClick={onRightIcon} cursor='pointer'>{rightIcon}</InputRightElement>
+        <InputRightElement marginTop='4px' onClick={onRightIcon} cursor='pointer'>{rightIcon}</InputRightElement>
       )}
     </InputGroup>
   );

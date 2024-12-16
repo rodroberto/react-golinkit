@@ -13,6 +13,7 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
 import Onboarding from '../pages/Onboarding';
+import PublicProfile from '../pages/PublicProfile';
 
 const AppRoutes = () => {
   return (
@@ -22,14 +23,16 @@ const AppRoutes = () => {
         <Route element={<UnauthorizedRoute />}>
           <Route path='/' element={<Welcome />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/profiles/:profileLink' element={<PublicProfile />} />
         </Route>
 
         {/* Private Routes */}
         <Route element={<PrivateRoute />}>
           <Route path='/onboarding' element={<Onboarding />} />
           <Route path='/profile' element={<Profile />} />
+          {/* Verify step can be after login */}
+          <Route path='/signup' element={<Signup />} /> 
         </Route>
 
         {/* Redirect to home page */}
