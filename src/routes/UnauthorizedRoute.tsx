@@ -1,6 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
-
-import { useAuth } from '../lib/contexts/AuthContext';
+import { Outlet } from 'react-router-dom';
 
 const UnauthorizedRoute: React.FC = () => {
   return <Outlet />;
