@@ -15,9 +15,11 @@ const ProfileInfo = ({
     <Flex flexDirection='column'>
       <Flex justifyContent='center'>
         <Image
-          src={`${process.env.REACT_APP_BASE_URL}/profiles/${profileImage}`}
+          src={`${process.env.REACT_APP_BASE_URL}/backgrounds/${backgroundImage}`}
           alt='Logo'
           width='100%'
+          maxHeight='200px'
+          objectFit='cover'
         />
       </Flex>
       <Flex justifyContent='center'>
@@ -25,7 +27,7 @@ const ProfileInfo = ({
           borderRadius='full'
           marginTop='-65px'
           boxSize='130px'
-          src={`${process.env.REACT_APP_BASE_URL}/backgrounds/${backgroundImage}`}
+          src={`${process.env.REACT_APP_BASE_URL}/profiles/${profileImage}`}
           alt='Dan Abramov'
         />
       </Flex>
