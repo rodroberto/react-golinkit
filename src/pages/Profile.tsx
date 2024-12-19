@@ -24,6 +24,7 @@ import Button from '../components/common/Button';
 import LinkItem from '../components/LinkItem';
 import { EditIcon } from '@chakra-ui/icons';
 import { useAuth } from '../lib/contexts/AuthContext';
+import UpdateBioModal from '../components/modals/UpdateBioModal';
 
 const MENU_ITEMS = Object.values(MenuItems);
 
@@ -36,6 +37,7 @@ const Profile = () => {
   const [isOpenChangePassword, setIsOpenChangePassword] =
     useState<boolean>(false);
   const [isOpenStats, setIsOpenStats] = useState<boolean>(false);
+  const [isOpenBio, setIsOpenBio] = useState<boolean>(false);
   const [links, setLinks] = useState<LinkType[]>([]);
   const [selectedLink, setSelectedLink] = useState<LinkType>();
   const [user, setUser] = useState<UserType>();
@@ -52,7 +54,7 @@ const Profile = () => {
       },
     });
     if (!data.isVerified) {
-      navigate(`/signup?email-verify=${data.email}`)
+      navigate(`/signup?email-verify=${data.email}`);
     } else if (!data.profileImage) {
       navigate('/onboarding');
     }
@@ -107,6 +109,9 @@ const Profile = () => {
       case MenuItems.STATS:
         setIsOpenStats(true);
         break;
+      case MenuItems.UPDATE_BIO:
+        setIsOpenBio(true);
+        break;
       case MenuItems.LOGOUT:
         logout();
         break;
@@ -125,9 +130,12 @@ const Profile = () => {
     >
       <Flex flexDirection='column' gap={6}>
         <ProfileInfo
-          email={user?.email || ''}
+          username={user?.username || ''}
           profileImage={user?.profileImage || ''}
           backgroundImage={user?.backgroundImage || ''}
+          bio={user?.bio || ''}
+          isUpdateProfileImage
+          onProfileImageUpdated={() => getCurrentUser()}
         />
         <Flex flexDirection='column' gap={4} maxHeight='250px' overflow='auto'>
           {links.map(({ imageName, title, url, _id }) => (
@@ -144,6 +152,8 @@ const Profile = () => {
                 });
                 setIsOpenAddLink(true);
               }}
+              url={url}
+              linkId={_id}
             />
           ))}
         </Flex>
@@ -200,6 +210,14 @@ const Profile = () => {
         onClose={() => setIsOpenStats(false)}
         links={links}
         onUpdateLinks={() => getLinks()}
+      />
+      <UpdateBioModal
+        isOpen={isOpenBio}
+        onClose={() => {
+          getCurrentUser()
+          setIsOpenBio(false)
+        }}
+        bio={user?.bio || ''}
       />
     </PageLayout>
   );

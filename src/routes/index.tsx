@@ -24,13 +24,13 @@ const AppRoutes = () => {
           <Route path='/' element={<Welcome />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/profiles/:profileLink' element={<PublicProfile />} />
+          <Route path='/:profileLink' element={<PublicProfile />} />
           <Route path='/signup' element={<Signup />} /> 
+          <Route path='/onboarding' element={<Onboarding />} />
         </Route>
 
         {/* Private Routes */}
         <Route element={<PrivateRoute />}>
-          <Route path='/onboarding' element={<Onboarding />} />
           <Route path='/profile' element={<Profile />} />
         </Route>
 

@@ -36,7 +36,8 @@ const PublicProfile = () => {
     <PageLayout onBack={onBack} title='Profile'>
       <Flex flexDirection='column' gap={6}>
         <ProfileInfo
-          email={user?.email || ''}
+          username={user?.username || ''}
+          bio={user?.bio || ''}
           profileImage={user?.profileImage || ''}
           backgroundImage={user?.backgroundImage || ''}
         />

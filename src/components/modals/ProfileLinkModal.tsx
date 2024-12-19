@@ -17,7 +17,7 @@ const ProfileLinkModal = ({
 
   const onCopyLink = () => {
     navigator.clipboard.writeText(
-      `${process.env.REACT_APP_WEP_URL}/profiles/${profileLink}`
+      `${process.env.REACT_APP_WEP_URL}/${profileLink}`
     );
     toast({
       title: 'Profile Link',
@@ -36,7 +36,7 @@ const ProfileLinkModal = ({
       title='Profile Link'
       body={
         <TextInput
-          value={`${process.env.REACT_APP_WEP_URL}/profiles/${profileLink}`}
+          value={`${process.env.REACT_APP_WEP_URL}/${profileLink}`}
           placeholder='Profile link'
         />
       }

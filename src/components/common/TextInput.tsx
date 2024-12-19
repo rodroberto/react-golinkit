@@ -50,8 +50,8 @@ const TextInput = ({
         size='lg'
         fontSize='16px'
         readOnly={isReadOnly}
-        {...isReadOnly && !rightIcon && {cursor: 'pointer'}}
-        {...isReadOnly && !rightIcon && {onClick}}
+        {...isReadOnly && {cursor: 'pointer'}}
+        {...isReadOnly && {onClick}}
       />
       {rightIcon && (
         <InputRightElement marginTop='4px' onClick={onRightIcon} cursor='pointer'>{rightIcon}</InputRightElement>

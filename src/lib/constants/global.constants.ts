@@ -9,6 +9,7 @@ export enum MenuItems {
   PROFILE_LINK = 'Profile Link',
   CHANGE_LINK = 'Change Link',
   UPDATE_EMAIL = 'Update Email',
+  UPDATE_BIO = 'Update Bio',
   CHANGE_PASSWORD = 'Change Password',
   STATS = 'Stats',
   LOGOUT = 'Log Out',

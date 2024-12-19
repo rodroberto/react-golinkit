@@ -3,19 +3,21 @@ import TextInput from './common/TextInput';
 import ProfileInfo from './ProfileInfo';
 
 interface ChangeLinkProps {
-  email: string;
+  username: string;
   profileLink: string;
   onChangeProfileLink: (profileLink: string) => void;
   profileImage: string;
   backgroundImage: string;
+  bio: string;
 }
 
 const ChangeLink = ({
   profileLink,
-  email,
+  username,
   onChangeProfileLink,
   profileImage,
   backgroundImage,
+  bio,
 }: ChangeLinkProps) => {
   return (
     <Flex flexDirection='column' gap={4}>
@@ -23,7 +25,7 @@ const ChangeLink = ({
         <Text marginBottom='8px'>Change Public link</Text>
         <TextInput
           isReadOnly
-          value={`${process.env.REACT_APP_WEP_URL}/profiles/${profileLink}`}
+          value={`${process.env.REACT_APP_WEP_URL}/${profileLink}`}
         />
       </FormControl>
       <FormControl>
@@ -33,9 +35,10 @@ const ChangeLink = ({
       <Box borderRadius='8px' border='1px solid #e2e8f0' padding='12px'>
         <Text marginBottom='8px'>Preview Link</Text>
         <ProfileInfo
-          email={email}
+          username={username}
           profileImage={profileImage}
           backgroundImage={backgroundImage}
+          bio={bio}
         />
       </Box>
     </Flex>

@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import PageLayout from '../components/layouts/PageLayout';
 import { OnboardingStep } from '../lib/constants/global.constants';
-import { Divider, Flex, Text, Textarea } from '@chakra-ui/react';
+import { Divider, Flex, Text, Textarea, useToast } from '@chakra-ui/react';
 import ImageDropzone from '../components/common/ImageDropZone';
 import ChangeLink from '../components/ChangeLink';
 import Button from '../components/common/Button';
@@ -19,6 +19,7 @@ const Onboarding = () => {
   const TOKEN = localStorage.getItem('token');
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     getCurrentUser();
@@ -42,18 +43,29 @@ const Onboarding = () => {
 
   const onNext = async () => {
     if (step === OnboardingStep.LINK_STEP) {
-      const { data } = await Api.put(
-        `/users/profile-link`,
-        {
-          profileLink,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
+      try {
+        const { data } = await Api.put(
+          `/users/profile-link`,
+          {
+            profileLink,
           },
-        }
-      );
-      navigate('/profile');
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        );
+        navigate('/profile');
+      } catch (err) {
+        toast({
+          title: 'Craete profile link',
+          description: 'Profile link is already exist',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        });
+      }
     } else {
       const { data } = await Api.put(
         `/users/onboarding`,
@@ -98,7 +110,8 @@ const Onboarding = () => {
     ),
     [OnboardingStep.LINK_STEP]: (
       <ChangeLink
-        email={user?.email || ''}
+        username={user?.username || ''}
+        bio={user?.bio || ''}
         profileImage={user?.profileImage || ''}
         backgroundImage={user?.backgroundImage || ''}
         profileLink={profileLink}
@@ -108,17 +121,14 @@ const Onboarding = () => {
   };
 
   const isDisabledMapper: Record<OnboardingStep, boolean> = {
-    [OnboardingStep.INFO_STEP] : !profileImage || !backgroundImage || !bio,
-    [OnboardingStep.LINK_STEP]: !profileLink
-  }
+    [OnboardingStep.INFO_STEP]: !profileImage || !backgroundImage || !bio,
+    [OnboardingStep.LINK_STEP]: !profileLink,
+  };
 
   return (
     <PageLayout onBack={onBack} title='Finish Profile'>
       {stepMapper[step]}
-      <Button
-        isDisabled={isDisabledMapper[step]}
-        onClick={onNext}
-      >
+      <Button isDisabled={isDisabledMapper[step]} onClick={onNext}>
         Done
       </Button>
     </PageLayout>

@@ -1,16 +1,41 @@
 import { Flex, Image, Text } from '@chakra-ui/react';
+import ImageDropzone from './common/ImageDropZone';
+import { Api } from '../lib/Api';
 
 interface ProfileInfoProps {
-  email: string;
+  username: string;
   profileImage: string;
   backgroundImage: string;
+  bio: string;
+  isUpdateProfileImage?: boolean;
+  onProfileImageUpdated?: () => void;
 }
 
 const ProfileInfo = ({
-  email,
+  username,
   profileImage,
   backgroundImage,
+  bio,
+  isUpdateProfileImage = false,
+  onProfileImageUpdated
 }: ProfileInfoProps) => {
+  const TOKEN = localStorage.getItem('token');
+
+  const onUpdateProfileImage = async (image: string) => {
+    const { data } = await Api.put(
+      `/users/update-profile-image`,
+      {
+        image,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
+    onProfileImageUpdated?.()
+  };
+
   return (
     <Flex flexDirection='column'>
       <Flex justifyContent='center'>
@@ -22,19 +47,29 @@ const ProfileInfo = ({
           objectFit='cover'
         />
       </Flex>
-      <Flex justifyContent='center'>
-        <Image
-          borderRadius='full'
-          marginTop='-65px'
-          boxSize='130px'
-          src={`${process.env.REACT_APP_BASE_URL}/profiles/${profileImage}`}
-          alt='Dan Abramov'
-        />
+      <Flex justifyContent='center' marginTop='-65px'>
+        {isUpdateProfileImage ? (
+          <ImageDropzone
+            isCircle
+            width='140px'
+            height='140px'
+            image={profileImage}
+            imageDirectory='profiles'
+            onSetImage={(val: string) => onUpdateProfileImage(val)}
+          />
+        ) : (
+          <Image
+            borderRadius='full'
+            boxSize='130px'
+            src={`${process.env.REACT_APP_BASE_URL}/profiles/${profileImage}`}
+            alt='Dan Abramov'
+          />
+        )}
       </Flex>
       <Text textAlign='center' marginY='16px'>
-        {email}
+        {username}
       </Text>
-      <Text textAlign='center'>description</Text>
+      <Text textAlign='center'>{bio}</Text>
     </Flex>
   );
 };

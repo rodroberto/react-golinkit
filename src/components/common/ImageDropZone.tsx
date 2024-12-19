@@ -7,6 +7,7 @@ interface ImageDropzoneProps {
   width: string;
   image: string;
   onSetImage: (val: string) => void;
+  imageDirectory?: string;
 }
 
 const ImageDropzone = ({
@@ -15,6 +16,7 @@ const ImageDropzone = ({
   height,
   image,
   onSetImage,
+  imageDirectory = 'links',
 }: ImageDropzoneProps) => {
   const toast = useToast();
 
@@ -30,7 +32,7 @@ const ImageDropzone = ({
           status: 'success',
           duration: 3000,
           isClosable: true,
-          position: 'top'
+          position: 'top',
         });
       };
       reader.readAsDataURL(file); // Read the file as base64
@@ -41,7 +43,7 @@ const ImageDropzone = ({
         status: 'error',
         duration: 3000,
         isClosable: true,
-        position: 'top'
+        position: 'top',
       });
     }
   };
@@ -69,7 +71,7 @@ const ImageDropzone = ({
           <Image
             src={
               image.includes('.')
-                ? `${process.env.REACT_APP_BASE_URL}/links/${image}`
+                ? `${process.env.REACT_APP_BASE_URL}/${imageDirectory}/${image}`
                 : image
             }
             alt='Uploaded image'
