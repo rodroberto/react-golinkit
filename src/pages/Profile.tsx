@@ -134,8 +134,7 @@ const Profile = () => {
           profileImage={user?.profileImage || ''}
           backgroundImage={user?.backgroundImage || ''}
           bio={user?.bio || ''}
-          isUpdateProfileImage
-          onProfileImageUpdated={() => getCurrentUser()}
+          onImageUpdated={() => getCurrentUser()}
         />
         <Flex flexDirection='column' gap={4} maxHeight='250px' overflow='auto'>
           {links.map(({ imageName, title, url, _id }) => (
